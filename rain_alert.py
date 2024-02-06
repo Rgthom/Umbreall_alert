@@ -94,6 +94,6 @@ def lambda_handler(event, context):
             'text': message
         })
     else:
-        print("No rain today! ☀️")  # Print for debugging purposes when there's no rain
+        print("There is no rain today! ☀️")  # Print for debugging purposes when there's no rain
 
     write_log()
