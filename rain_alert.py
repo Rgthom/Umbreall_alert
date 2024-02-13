@@ -3,15 +3,12 @@ import json
 import os
 from datetime import datetime
 
+
 def lambda_handler(event, context):
-    # CREATING LOGGING FUNCTION
     def write_log():
         with open('/tmp/log.txt', 'a') as file:  # Use /tmp directory for Lambda
-            # Get the current time
             current_time = datetime.now()
-            # Format the timestamp
             timestamp = current_time.strftime("%Y-%m-%d %H:%M:%S")
-            # Write the log entry
             file.write(f"Script ran at: {timestamp}\n")
 
     # WEATHER LOGIC >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -29,16 +26,18 @@ def lambda_handler(event, context):
     with open('/tmp/weather_data.json', 'w') as file:  # Use /tmp directory for Lambda
         json.dump(weather_data, file, indent=4)
 
-    # NEW EMPTY LIST
+
     weather_times_list = []
 
-    # SETTING ITEMS IN THE LIST
+
     for hour in weather_data:
         if hour['PrecipitationProbability'] > 32:
             weather_times_list.append(hour['DateTime'])
 
     formatted_times = [datetime.fromisoformat(time).strftime('%H:%M') for time in weather_times_list]
 
+    
+    
     # SETTING THE CRITERIA FOR THE WEATHER
 
     # ALL DAY
@@ -79,13 +78,11 @@ def lambda_handler(event, context):
 
     # TELEGRAM LOGIC
 
-    # Replace 'YOUR_BOT_TOKEN' with your actual bot token
+   
     bot_token = os.environ['BOT_TOKEN']
 
-    # Replace 'YOUR_CHAT_ID' with your actual chat ID
     chat_id = os.environ['CHAT_ID']
 
-    # Telegram URL for sending messages
     send_message_url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
 
     if weather_times_list:
